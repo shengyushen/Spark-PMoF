@@ -54,12 +54,14 @@ private[spark] class PmofShuffleManager(conf: SparkConf) extends ShuffleManager 
         handle.asInstanceOf[BaseShuffleHandle[K, V, _]], mapId, context, pmofConf)
     }
   }
-
+	// SSY intel's shuffle manager
   override def getReader[K, C](handle: _root_.org.apache.spark.shuffle.ShuffleHandle, startPartition: Int, endPartition: Int, context: _root_.org.apache.spark.TaskContext): _root_.org.apache.spark.shuffle.ShuffleReader[K, C] = {
     if (pmofConf.enableRdma) {
+			// SSY ../Spark-PMoF/core/src/main/scala/org/apache/spark/shuffle/pmof/RdmaShuffleReader.scala
       new RdmaShuffleReader(handle.asInstanceOf[BaseShuffleHandle[K, _, C]],
         startPartition, endPartition, context, pmofConf)
     } else {
+			// SSY ../Spark-PMoF/core/src/main/scala/org/apache/spark/shuffle/pmof/BaseShuffleReader.scala
       new BaseShuffleReader(
         handle.asInstanceOf[BaseShuffleHandle[K, _, C]], startPartition, endPartition, context, pmofConf)
     }
